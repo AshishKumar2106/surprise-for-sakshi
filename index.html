@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Surprise for My Love</title>
+    <!-- Use Tailwind CSS for beautiful, responsive design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for the 3D image effect -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            /* A new, beautiful background gradient with a more dynamic animation */
+            background: linear-gradient(135deg, #fbcfe8 0%, #f472b6 25%, #a855f7 50%, #6366f1 75%, #0ea5e9 100%);
+            background-size: 400% 400%;
+            animation: gradient-animation 20s ease infinite;
+        }
+
+        @keyframes gradient-animation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        
+        /* Starry background effect */
+        .stars-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 1px, transparent 1px) 0 0 / 20px 20px;
+            animation: move-stars 100s linear infinite;
+        }
+
+        @keyframes move-stars {
+            from {
+                background-position: 0 0;
+            }
+            to {
+                background-position: 1000px 1000px;
+            }
+        }
+
+        /* Custom class for the card with a soft shadow and rounded corners */
+        .surprise-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-radius: 1.5rem; /* Significantly more rounded corners */
+            animation: heartbeat 2s ease-in-out infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+        }
+
+        /* Style for the heading and message with a soft glow */
+        .heading {
+            text-shadow: 0 0 10px #f472b6, 0 0 20px #f472b6, 0 0 30px #f472b6;
+        }
+        .message {
+            line-height: 1.6;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Smooth transition for the content change */
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating particles (hearts and flowers) for added charm */
+        .particle-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.8;
+            animation: float-up 10s linear infinite;
+        }
+        @keyframes float-up {
+            from {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            to {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        .particle:nth-child(1) { left: 10%; animation-duration: 12s; animation-delay: -2s; }
+        .particle:nth-child(2) { left: 25%; animation-duration: 15s; animation-delay: -5s; }
+        .particle:nth-child(3) { left: 50%; animation-duration: 10s; animation-delay: -1s; }
+        .particle:nth-child(4) { left: 70%; animation-duration: 14s; animation-delay: -3s; }
+        .particle:nth-child(5) { left: 90%; animation-duration: 11s; animation-delay: -6s; }
+
+        .left-effects {
+            position: absolute;
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+        .big-heart {
+            font-size: 8rem;
+            color: #ef4444; /* Tailwind's red-500 */
+            text-shadow: 0 0 20px #ef4444, 0 0 40px #f87171;
+            animation: big-heart-beat 1.5s ease-in-out infinite;
+        }
+        @keyframes big-heart-beat {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Three.js canvas container */
+        #three-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            /* Simple glow effect for the canvas */
+            filter: drop-shadow(0 0 10px #fbcfe8);
+        }
+        .video-container {
+            max-width: 800px;
+            width: 100%;
+        }
+        .error-message {
+            color: #ef4444;
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        .video-container-9-16 {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            padding-bottom: 177.77%; /* 16:9 aspect ratio */
+            margin: 0 auto;
+        }
+
+        .video-container-9-16 video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen text-gray-800 p-4 relative">
+    
+    <!-- Starry background -->
+    <div class="stars-container"></div>
+
+    <!-- Teddy bear and big heart on the left -->
+    <div class="left-effects hidden sm:flex">
+        <!-- Replaced the placeholder with your local teddy bear image file -->
+        <img src="Teddy Bear.png" alt="Teddy Bear" class="w-24 sm:w-32 rounded-full">
+        <span class="big-heart">❤️</span>
+    </div>
+
+    <!-- Container for the 3D scene (initially hidden) -->
+    <div id="three-container" class="hidden"></div>
+
+    <!-- Floating hearts and flowers -->
+    <div class="particle-container">
+        <span class="particle">🌸</span>
+        <span class="particle">💖</span>
+        <span class="particle">🌹</span>
+        <span class="particle">❤️</span>
+        <span class="particle">💐</span>
+        <span class="particle">❤️</span>
+    </div>
+
+    <!-- Main content card (initially visible) -->
+    <div id="surprise-container" class="surprise-card text-center p-8 sm:p-12 max-w-lg w-full transition-transform duration-300 ease-in-out transform hover:scale-105 cursor-pointer z-10">
+        
+        <!-- Heading -->
+        <h1 id="heading-text" class="heading text-4xl sm:text-5xl font-bold text-pink-600 mb-4 transition-colors duration-300">
+            Surprise!
+        </h1>
+        
+        <!-- Message -->
+        <p id="message-text" class="message text-lg sm:text-xl text-gray-700 transition-opacity duration-300 fade-in">
+            Click here for a surprise message, my love.
+        </p>
+    </div>
+
+    <!-- Name input card (initially hidden) -->
+    <div id="name-input-container" class="hidden surprise-card text-center p-8 sm:p-12 max-w-lg w-full z-10">
+        <h1 class="heading text-4xl sm:text-5xl font-bold text-pink-600 mb-4">
+            One more step...
+        </h1>
+        <p class="message text-lg sm:text-xl text-gray-700 mb-6">
+            Enter your name to unlock the final surprise!
+        </p>
+        <input id="name-input" type="text" placeholder="Your Name" class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-500 mb-4">
+        <p id="error-message" class="error-message hidden text-sm mt-2">Please enter the correct name.</p>
+        <button id="show-images-btn" class="w-full bg-pink-500 text-white font-bold py-3 rounded-md hover:bg-pink-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            See the Surprise
+        </button>
+    </div>
+
+    <!-- Personalized welcome card (initially hidden) -->
+    <div id="welcome-container" class="hidden surprise-card text-center p-8 sm:p-12 max-w-lg w-full z-10">
+        <h1 id="welcome-heading" class="heading text-4xl sm:text-5xl font-bold text-pink-600 mb-4">
+            Hello!
+        </h1>
+        <p id="welcome-message" class="message text-lg sm:text-xl text-gray-700 mb-6">
+            
+        </p>
+        <button id="show-collage-btn" class="w-full bg-pink-500 text-white font-bold py-3 rounded-md hover:bg-pink-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            Show the Collage
+        </button>
+    </div>
+
+    <!-- Video container (initially hidden) -->
+    <div id="video-page" class="hidden flex flex-col items-center justify-center p-4">
+        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 heading">A Special Message Just for You...</h2>
+        <div class="video-container-9-16 rounded-xl shadow-lg">
+            <video id="surprise-video" class="w-full h-auto rounded-xl shadow-lg" muted controls>
+                <!-- Video source has been updated to your local file -->
+                <source src="sakshi.mp4" type="video/mp4">
+            </video>
+        </div>
+        <button id="video-close-btn" class="mt-8 bg-pink-500 text-white font-bold py-3 px-6 rounded-md hover:bg-pink-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500">
+            Close Video
+        </button>
+    </div>
+
+    <script>
+        // An array of sweet and loving messages
+        const messages = [
+            { heading: "You're My Everything", text: "You fill my life with so much joy and happiness, Sakshi. I'm so lucky to have you." },
+            { heading: "Just for You", text: "Even the simplest moments with you are my favorite. Thank you for being you, my love." },
+            { heading: "My Heart", text: "My heart skips a beat every time I see your name light up my phone, Sakshi. Thinking of you always." },
+            { heading: "A Little Reminder", text: "Just wanted to remind you how amazing you are and how much I adore you." },
+            { heading: "You're a Star", text: "You light up my world more than all the stars in the sky combined. You truly are my everything, Sakshi." },
+            { heading: "Hello, Beautiful", text: "Just a random little surprise to say hello and tell you how much you mean to me." },
+            { heading: "You're Home", text: "You are my home, my safe place, and the most incredible person I know, Sakshi." },
+            { heading: "My Favorite Person", text: "Out of all the people in the world, you're my favorite. Thanks for being the best." },
+            { heading: "Always Thinking of You", text: "I can't stop thinking about you, Sakshi, and I wouldn't have it any other way. You're constantly on my mind." },
+            { heading: "My Happiness", text: "You are the reason for my smile. Seeing you happy makes me the happiest person alive." },
+            { heading: "Something Good", text: "Look at the beauty around you!" }
+        ];
+
+        let messageIndex = 0;
+        const surpriseContainer = document.getElementById('surprise-container');
+        const nameInputContainer = document.getElementById('name-input-container');
+        const welcomeContainer = document.getElementById('welcome-container');
+        const threeContainer = document.getElementById('three-container');
+        const videoPage = document.getElementById('video-page');
+        const surpriseVideo = document.getElementById('surprise-video');
+        const headingElement = document.getElementById('heading-text');
+        const messageElement = document.getElementById('message-text');
+        const showImagesBtn = document.getElementById('show-images-btn');
+        const showCollageBtn = document.getElementById('show-collage-btn');
+        const videoCloseBtn = document.getElementById('video-close-btn');
+        const nameInput = document.getElementById('name-input');
+        const welcomeHeading = document.getElementById('welcome-heading');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const errorMessage = document.getElementById('error-message');
+
+        // Add a click event listener to the initial message card
+        surpriseContainer.addEventListener('click', () => {
+            // If it's the last message, transition to the name input page
+            if (messageIndex === messages.length - 1) {
+                surpriseContainer.classList.add('hidden');
+                nameInputContainer.classList.remove('hidden');
+            } else {
+                // Otherwise, show the next message
+                const currentMessage = messages[messageIndex];
+                messageElement.classList.remove('fade-in');
+
+                setTimeout(() => {
+                    headingElement.textContent = currentMessage.heading;
+                    messageElement.textContent = currentMessage.text;
+                    messageElement.classList.add('fade-in');
+                }, 300);
+
+                messageIndex = (messageIndex + 1) % messages.length;
+            }
+        });
+
+        // Add a click event listener to the "See the Surprise" button
+        showImagesBtn.addEventListener('click', () => {
+            const enteredName = nameInput.value.trim().toLowerCase();
+            if (enteredName === 'sakshi') {
+                errorMessage.classList.add('hidden');
+                nameInputContainer.classList.add('hidden');
+                welcomeContainer.classList.remove('hidden');
+                welcomeHeading.textContent = `Hello, ${nameInput.value || 'my love'}!`;
+                welcomeMessage.textContent = "Thank you for being in my life. Here's something special for you.";
+            } else {
+                errorMessage.classList.remove('hidden');
+            }
+        });
+
+        // Add a click event listener to the "Show the Collage" button
+        showCollageBtn.addEventListener('click', () => {
+            welcomeContainer.classList.add('hidden');
+            threeContainer.classList.remove('hidden');
+            initThreeJS();
+
+            // After a few seconds, show the video button
+            setTimeout(() => {
+                const videoBtn = document.createElement('button');
+                videoBtn.id = 'check-video-btn';
+                videoBtn.className = 'mt-8 z-20 bg-pink-500 text-white font-bold py-3 px-6 rounded-md hover:bg-pink-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-pink-500';
+                videoBtn.textContent = 'Check Video';
+                videoBtn.onclick = () => {
+                    threeContainer.classList.add('hidden');
+                    videoPage.classList.remove('hidden');
+                    videoBtn.classList.add('hidden'); // Hide the button
+                    surpriseVideo.play();
+                };
+                document.body.appendChild(videoBtn);
+            }, 5000); // Show the button after 5 seconds
+        });
+        
+        // Add a click event listener to the "Close Video" button
+        videoCloseBtn.addEventListener('click', () => {
+            surpriseVideo.pause();
+            surpriseVideo.currentTime = 0;
+            videoPage.classList.add('hidden');
+            surpriseContainer.classList.remove('hidden');
+        });
+
+        // --- Three.js for 3D image collage ---
+        
+        let scene, camera, renderer, imageGroup;
+        const images = [];
+
+        function initThreeJS() {
+            // Scene setup
+            scene = new THREE.Scene();
+
+            // Camera setup
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 25; // Adjusted for better view
+
+            // Renderer setup
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0); // Transparent background
+            document.getElementById('three-container').appendChild(renderer.domElement);
+
+            // Light
+            const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
+            scene.add(ambientLight);
+
+            // Group to hold the images
+            imageGroup = new THREE.Group();
+            scene.add(imageGroup);
+
+            // Load images and create planes
+            const textureLoader = new THREE.TextureLoader();
+            const numImages = 10;
+            const radius = 15;
+            const tiltAngle = Math.PI / 8; // Half tilt from top to bottom
+            const yOffsetStep = -3.5;
+
+            // Array of placeholder image URLs. Replace these with your own URLs!
+     const imageUrls = [
+    'photo1.jpg',
+    'photo2.jpg',
+    'photo3.jpg',
+    'photo4.jpg',
+    'photo5.jpg',
+    'photo6.jpg',
+    'photo7.jpg',
+    'photo8.jpg',
+    'photo9.jpg',
+    'photo10.jpg',
+];
+            for (let i = 0; i < numImages; i++) {
+                const texture = textureLoader.load(imageUrls[i], 
+                    // Success callback
+                    (texture) => {
+                        const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true, side: THREE.DoubleSide });
+                        const geometry = new THREE.PlaneGeometry(8, 12);
+                        const plane = new THREE.Mesh(geometry, material);
+
+                        // Position and rotate
+                        const angle = (i / numImages) * Math.PI * 2;
+                        plane.position.x = radius * Math.sin(angle);
+                        plane.position.z = radius * Math.cos(angle);
+                        plane.position.y = i * yOffsetStep;
+                        plane.rotation.y = -angle; // Anti-clockwise rotation
+                        plane.rotation.x = tiltAngle; // Half tilt from top to bottom
+                        
+                        imageGroup.add(plane);
+                        images.push(plane);
+                    },
+                    undefined,
+                    // Error callback
+                    () => {
+                        console.error('Failed to load image texture.');
+                    }
+                );
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', onWindowResize, false);
+            
+            // Start the animation loop
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            // Rotate the entire group anti-clockwise
+            if (imageGroup) {
+                imageGroup.rotation.y += 0.002;
+            }
+            renderer.render(scene, camera);
+        }
+
+    </script>
+
+</body>
+</html>
