@@ -270,6 +270,22 @@
         </button>
     </div>
 
+    <!-- Music controls (new) -->
+    <div class="fixed bottom-4 left-1/2 -translate-x-1/2 flex gap-4 z-20">
+        <button id="play-button" class="p-3 bg-pink-500 text-white rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300">
+            <!-- Play icon (SVG) -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+        </button>
+        <button id="pause-button" class="p-3 bg-pink-500 text-white rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300">
+            <!-- Pause icon (SVG) -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+            </svg>
+        </button>
+    </div>
+
     <script>
         // An array of sweet and loving messages
         const messages = [
@@ -305,6 +321,8 @@
         const welcomeMessage = document.getElementById('welcome-message');
         const errorMessage = document.getElementById('error-message');
         const backgroundMusic = document.getElementById('background-music');
+        const playButton = document.getElementById('play-button');
+        const pauseButton = document.getElementById('pause-button');
 
         // Add a click event listener to the initial message card
         surpriseContainer.addEventListener('click', () => {
@@ -377,6 +395,15 @@
             surpriseVideo.currentTime = 0;
             videoPage.classList.add('hidden');
             surpriseContainer.classList.remove('hidden');
+        });
+
+        // Add event listeners for the music buttons
+        playButton.addEventListener('click', () => {
+            backgroundMusic.play();
+        });
+
+        pauseButton.addEventListener('click', () => {
+            backgroundMusic.pause();
         });
 
         // --- Three.js for 3D image collage ---
