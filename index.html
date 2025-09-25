@@ -188,6 +188,9 @@
 </head>
 <body class="flex items-center justify-center min-h-screen text-gray-800 p-4 relative">
     
+    <!-- Audio element for the background music -->
+    <audio id="background-music" src="zara.mp3" loop autoplay></audio>
+
     <!-- Starry background -->
     <div class="stars-container"></div>
 
@@ -400,18 +403,19 @@
             const yOffsetStep = -3.5;
 
             // Array of placeholder image URLs. Replace these with your own URLs!
-     const imageUrls = [
-    'photo1.jpg',
-    'photo2.jpg',
-    'photo3.jpg',
-    'photo4.jpg',
-    'photo5.jpg',
-    'photo6.jpg',
-    'photo7.jpg',
-    'photo8.jpg',
-    'photo9.jpg',
-    'photo10.jpg',
-];
+            const imageUrls = [
+                'https://placehold.co/400x600/e9d5ff/7c3aed?text=Image+1',
+                'https://placehold.co/400x600/e0c3fc/7c3aed?text=Image+2',
+                'https://placehold.co/400x600/b8a2e2/7c3aed?text=Image+3',
+                'https://placehold.co/400x600/9e92d7/7c3aed?text=Image+4',
+                'https://placehold.co/400x600/7d7aae/7c3aed?text=Image+5',
+                'https://placehold.co/400x600/5c5c8a/7c3aed?text=Image+6',
+                'https://placehold.co/400x600/4a4a6b/7c3aed?text=Image+7',
+                'https://placehold.co/400x600/38384a/7c3aed?text=Image+8',
+                'https://placehold.co/400x600/26262a/7c3aed?text=Image+9',
+                'https://placehold.co/400x600/141416/7c3aed?text=Image+10',
+            ];
+
             for (let i = 0; i < numImages; i++) {
                 const texture = textureLoader.load(imageUrls[i], 
                     // Success callback
