@@ -402,18 +402,23 @@
             const tiltAngle = Math.PI / 8; // Half tilt from top to bottom
             const yOffsetStep = -3.5;
 
-            // Array of placeholder image URLs. Replace these with your own URLs!
+            // --- IMPORTANT: FIX THE IMAGE LOADING ERROR ---
+            // The error "Failed to load image texture." means the website cannot find the images.
+            // You need to replace the filenames below with the exact names of your photos.
+            // For example, if your photo is named 'my_girlfriend_photo.jpg', you need to change the line below.
+            // Make sure all these files are in the same folder as your index.html file.
+            // If you have fewer than 10 images, remove the extra lines.
             const imageUrls = [
-                'https://placehold.co/400x600/e9d5ff/7c3aed?text=Image+1',
-                'https://placehold.co/400x600/e0c3fc/7c3aed?text=Image+2',
-                'https://placehold.co/400x600/b8a2e2/7c3aed?text=Image+3',
-                'https://placehold.co/400x600/9e92d7/7c3aed?text=Image+4',
-                'https://placehold.co/400x600/7d7aae/7c3aed?text=Image+5',
-                'https://placehold.co/400x600/5c5c8a/7c3aed?text=Image+6',
-                'https://placehold.co/400x600/4a4a6b/7c3aed?text=Image+7',
-                'https://placehold.co/400x600/38384a/7c3aed?text=Image+8',
-                'https://placehold.co/400x600/26262a/7c3aed?text=Image+9',
-                'https://placehold.co/400x600/141416/7c3aed?text=Image+10',
+                'photo1.jpg',
+                'photo2.jpg',
+                'photo3.jpg',
+                'photo4.jpg',
+                'photo5.jpg',
+                'photo6.jpg',
+                'photo7.jpg',
+                'photo8.jpg',
+                'photo9.jpg',
+                'photo10.jpg',
             ];
 
             for (let i = 0; i < numImages; i++) {
